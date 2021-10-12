@@ -1,0 +1,271 @@
+# Course: Sdev 140
+# Author: Villa, T
+# Date: 2021-10-8
+# Program: Final Project
+# Purpose: Program for filling out an order form for the user's dog's grooming session
+
+import tkinter as tk
+from tkinter.constants import END, SEPARATOR
+
+#FIRST WINDOW
+
+# Main window
+window1 = tk.Tk()
+window1.title("Final Project by TV")
+window1.geometry("580x460")
+window1.configure(bg="#5bcdb9")
+
+# Array to hold price total
+total = []
+
+# Arroy to hold user's selected services
+services = []
+SEPARATOR = ","
+
+# Method for clearing entries
+def clear_entries():
+    txt_Name.delete(0, END)
+    txt_Dog_Name.delete(0, END)
+    txt_Address.delete(0, END)
+    txt_Address.delete(0, END)
+    txt_Zip.delete(0, END)
+    txt_Email.delete(0, END)
+    chk_Nail_Trim.deselect()
+    chk_Brush.deselect()
+    chk_Hair_Cut.deselect()
+    chk_Bath.deselect()
+    services.clear()
+    total.clear()
+    lbl_Message.config(text="Entries Cleared", bg="#D7B9A6")
+
+# Method for validation
+def validation():
+    anyChecked = nailCheck.get() | brushCheck.get() | hairCheck.get() | bathCheck.get()
+    
+    zipInt = txt_Zip.get()
+
+    if len(txt_Name.get()) == 0:
+        lbl_Message.config(text="Can't leave entries blank!", bg="#D7B9A6")
+    elif len(txt_Dog_Name.get()) == 0:
+        lbl_Message.config(text="Can't leave entries blank!", bg="#D7B9A6")
+    elif len(txt_Address.get()) == 0:
+        lbl_Message.config(text="Can't leave entries blank!", bg="#D7B9A6")
+    elif zipInt.isnumeric() == False:
+        lbl_Message.config(text="Zipcode has to be a number!", bg="#D7B9A6")
+    elif len(txt_Email.get()) == 0:
+        lbl_Message.config(text="Can't leave entries blank!", bg="#D7B9A6")
+    elif anyChecked:
+        secondWindow()
+    else:
+        lbl_Message.config(text="Can't leave entries blank!", bg="#D7B9A6")
+
+
+# Import images
+dog = tk.PhotoImage(file="dog.png")
+paw1 = tk.PhotoImage(file="paw1.png")
+
+# Placement of images
+lblDog = tk.Label(image=dog, borderwidth=0)
+lblDog.grid(row=8, column=1, rowspan=9, padx=(20,0))
+
+lblpaw1 = tk.Label(image=paw1, borderwidth=0)
+lblpaw1.grid(row=0, column=0)
+
+lblpaw2 = tk.Label(image=paw1, borderwidth=0)
+lblpaw2.grid(row=0, column=3)
+
+# Colored backgrounds for entry and checkboxes
+entrycanvas = tk.Canvas(width=510, height=160, highlightthickness=0, bg="#D7B9A6")
+entrycanvas.place(x=35, y=50)
+
+checkcanvas = tk.Canvas(width=180, height=170, highlightthickness=0, bg="#D7B9A6")
+checkcanvas.place(x=10, y=220)
+
+# Labels for entry form
+lbl_Title = tk.Label(text="Prim Paws", font=('Modern No. 20', 23), bg="#D7B9A6")
+lbl_Name = tk.Label(text="Name:", font=('Modern No. 20',16), bg="#D7B9A6")
+lbl_Dog_Name = tk.Label(text="Dog's Name:", font=('Modern No. 20',16), bg="#D7B9A6")
+lbl_Address = tk.Label(text="Street Address:", font=('Modern No. 20',16), bg="#D7B9A6")
+lbl_Zip = tk.Label(text="Zip Code:", font=('Modern No. 20',16), bg="#D7B9A6")
+lbl_Email = tk.Label(text="Email:", font=('Modern No. 20',16), bg="#D7B9A6")
+
+# Text boxes for entry form
+txt_Name = tk.Entry(width=30)
+txt_Dog_Name = tk.Entry(width=30)
+txt_Address = tk.Entry(width=30)
+txt_Zip = tk.Entry(width=30)
+txt_Email = tk.Entry(width=30)
+
+# Text box entry form label positioning
+lbl_Title.grid(row=0, column=1, columnspan=1, pady=(0,20), padx=(20,0))
+lbl_Name.grid(row=1, column=0, sticky="e")
+lbl_Dog_Name.grid(row=2, column=0, sticky="e")
+lbl_Address.grid(row=3, column=0, sticky="e")
+lbl_Zip.grid(row=4, column=0, sticky="e")
+lbl_Email.grid(row=5, column=0, sticky="e")
+
+# Text boxes entry form positioning
+txt_Name.grid(row=1, column=1, padx=(20,0))
+txt_Dog_Name.grid(row=2, column=1, padx=(20,0))
+txt_Address.grid(row=3, column=1, padx=(20,0))
+txt_Zip.grid(row=4, column=1, padx=(20,0))
+txt_Email.grid(row=5, column=1, padx=(20,0))
+
+
+
+# Prices
+def addNailtrim():
+    services.append("Nails")
+    total.append(10)
+
+def addBrush():
+    services.append("Brushing")
+    total.append(15)
+
+def addHaircut():
+    services.append("Haircut")
+    total.append(18)
+
+def addBath():
+    services.append("Bath")
+    total.append(20)
+
+    
+
+# Checks is checkbox is selected
+nailCheck = tk.BooleanVar()
+brushCheck = tk.BooleanVar()
+hairCheck = tk.BooleanVar()
+bathCheck = tk.BooleanVar()
+
+
+# Labels for selection area
+lbl_Service = tk.Label(text="Choose a Service", font=('Modern No. 20', 15,'underline'), bg="#D7B9A6")
+chk_Nail_Trim = tk.Checkbutton(text="Nail Trimming: $10", font=('Modern No. 20', 13), bg="#D7B9A6", onvalue=1, offvalue=0, variable=nailCheck, command=addNailtrim)
+chk_Brush = tk.Checkbutton(text="Brushing: $15", font=('Modern No. 20', 13), onvalue=1, offvalue=0, bg="#D7B9A6", variable=brushCheck, command=addBrush)
+chk_Hair_Cut = tk.Checkbutton(text="Haircut: $18", font=('Modern No. 20', 13), onvalue=1, offvalue=0, bg="#D7B9A6", variable=hairCheck, command=addHaircut)
+chk_Bath = tk.Checkbutton(text="Bathing: $20", font=('Modern No. 20', 13), onvalue=1, offvalue=0, bg="#D7B9A6", variable=bathCheck, command=addBath)
+        
+# Position for selection area
+lbl_Service.grid(row=6, column=0, padx=15, pady=(18,5))
+chk_Nail_Trim.grid(row=7, column=0, columnspan=3, sticky="w", padx=15)
+chk_Brush.grid(row=8, column=0, sticky="w", padx=15)
+chk_Hair_Cut.grid(row=9, column=0, sticky="w", padx=15)
+chk_Bath.grid(row=10, column=0, sticky="w", padx=15)
+
+# Label prompting user to submit their entries
+lbl_Prompt = tk.Label(text="Click 'Submit'\nto receive a quote for your\ndog's grooming session!", font=('Modern No. 20', 13), bg="#D7B9A6")
+
+# Positioning for prompt label        
+lbl_Prompt.grid(row=7, column=2, rowspan=3, columnspan=2)
+
+# Buttons to submit or clear entries
+btn_Submit = tk.Button(text="Submit", bg="#D7B9A6", command=validation)
+btn_Clear = tk.Button(text="Clear", bg="#D7B9A6", command=clear_entries)
+
+# Positioning for buttons
+btn_Submit.grid(row=9, column=2, rowspan=5, columnspan=3, sticky="e", pady=30)
+btn_Clear.grid(row=9, column=2, rowspan=5, columnspan=3, sticky="w")
+
+# Label for messages
+lbl_Message = tk.Label(bg="#5bcdb9", font=('Modern No. 20', 12))
+
+# Positioning for message
+lbl_Message.grid(row=11, column=2, rowspan=9, columnspan=9)
+
+
+#SECOND WINDOW
+def secondWindow():
+    global total
+
+    window2 = tk.Toplevel(window1)
+    window2.title("Final Project by TV")
+    window2.geometry("380x410")
+    window2.configure(bg="#5bcdb9")
+
+    # Background color for displayed entries
+    recieptcanvas = tk.Canvas(window2, width=380, height=250, highlightthickness=0, bg="#D7B9A6")
+    recieptcanvas.place(x=0, y=50)
+
+    # Title label
+    lbl_Title2 = tk.Label(window2, text="Prim Paws", font=('Modern No. 20',16), bg="#D7B9A6")
+    lbl_Title2.grid(row=0, column=1, columnspan=1, pady=(0,20), padx=(10,0))
+
+    # Label and displayed entry for name
+    lbl_Name2 = tk.Label(window2, text="Name:", font=('Modern No. 20',16), bg="#D7B9A6")
+    lbl_Name2.grid(row=1, column=0, sticky="e")
+
+    txt_Name2 = tk.Label(window2, text=(txt_Name.get()), font=('Modern No. 20',13), bg="#fae8dc")
+    txt_Name2.grid(row=1, column=1)
+    
+    # Label and displayed entry for dog's name
+    lbl_Dogname2 = tk.Label(window2, text="Dogs Name:", font=('Modern No. 20',16), bg="#D7B9A6")
+    lbl_Dogname2.grid(row=2, column=0, sticky="e")
+
+    txt_Dogname2 = tk.Label(window2, text=(txt_Dog_Name.get()), font=('Modern No. 20',13), bg="#fae8dc")
+    txt_Dogname2.grid(row=2, column=1)
+
+    # Label and displayed entry for address    
+    lbl_Address2 = tk.Label(window2, text="Street Address:", font=('Modern No. 20',16), bg="#D7B9A6")
+    lbl_Address2.grid(row=3, column=0, sticky="e")
+
+    txt_Address2 = tk.Label(window2, text=(txt_Address.get()), font=('Modern No. 20',13), bg="#fae8dc")
+    txt_Address2.grid(row=3, column=1)
+
+    # Label and displayed entry for zipcode
+    lbl_Zip2 = tk.Label(window2, text="Zip Code:", font=('Modern No. 20',16), bg="#D7B9A6")
+    lbl_Zip2.grid(row=4, column=0, sticky="e")
+
+    txt_Zip2 = tk.Label(window2, text=(txt_Zip.get()), font=('Modern No. 20',13), bg="#fae8dc")
+    txt_Zip2.grid(row=4, column=1)
+
+    # Label and displayed entry for email
+    lbl_Email2 = tk.Label(window2, text="Email:", font=('Modern No. 20',16), bg="#D7B9A6")
+    lbl_Email2.grid(row=5, column=0, sticky="e")
+
+    txt_Email2 = tk.Label(window2, text=(txt_Email.get()), font=('Modern No. 20',13), bg="#fae8dc")
+    txt_Email2.grid(row=5, column=1)
+
+    # Label for displaying total
+    lbl_total = tk.Label(window2, text=("Total:","$",sum(total)), font=('Modern No. 20',20), bg="#fae8dc")
+    lbl_total.grid(row=7, column=1, pady=(10,5))
+    lbl_services = tk.Label(window2, text=("Services:"),font=('Modern No. 20',20), bg="#D7B9A6")
+    lbl_services.grid(row=6, column=0, sticky="e", pady=(10,0))
+    lbl_serviceslist = tk.Label(window2, text=(SEPARATOR.join(services)),font=('Modern No. 20',13), bg="#fae8dc")
+    lbl_serviceslist.grid(row=6, column=1, columnspan=6, pady=(10,0))
+
+    # Button for placing order
+    btn_Submit2 = tk.Button(window2, text="Place order", command=lambda: clickSubmit())
+    btn_Submit2.grid(row=9, column=1, pady=(15,5))
+
+    #Button for canceling order
+    quitbtn2 = tk.Button(window2, text="Cancel", command=lambda: cancelOrder())
+    quitbtn2.grid(row=10, column=1, pady=5)
+
+    
+    # Message box if user submits info
+    def clickSubmit():
+        window3 = tk.Toplevel(window2)
+        window3.title("Final Project by TV")
+        window3.geometry("187x100")
+
+        submit_message = tk.Label(window3, text="Thank you!\nYou may do another order or exit.")
+        submit_message.grid(row=0, column=1, columnspan=3)
+
+        submit_btn1 = tk.Button(window3,text="Quit", command=lambda:quitprogram())
+        submit_btn1.grid(row=1, column=1, pady=15)
+        submit_btn2 = tk.Button(window3,text="New Order", command=lambda:cancelOrder())
+        submit_btn2.grid(row=1, column=2, pady=15, columnspan=3)
+        
+    # Method for quitting program
+    def quitprogram():
+        window1.destroy()
+
+    # Method for exiting display window
+    def cancelOrder():
+        clear_entries()
+        services.clear()
+        total.clear()
+        window2.destroy()
+    
+window1.mainloop()
